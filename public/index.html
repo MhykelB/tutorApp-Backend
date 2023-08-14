@@ -7,40 +7,42 @@
     <link rel="stylesheet" href="./index.css" />
     <title>API Endpoints</title>
     <style>
+      body {
+        background: rgb(44, 59, 61);
+      }
       .wrapper {
-        background-color: rgba(2, 37, 46, 1);
+        outline: 2px solid rgb(34, 33, 33);
         margin: 12rem auto;
         max-width: 20rem;
         padding: 2rem;
         display: flex;
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 5rem;
         align-items: center;
+        border-radius: 0.5rem;
         font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
           "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-        font-weight: 100;
+        font-weight: 400;
       }
     </style>
     <link rel="stylesheet" type="text/css" />
   </head>
   <body>
     <div class="wrapper">
-      <h1
-        style="
-          color: rgb(229, 234, 235);
-          font-weight: 100;
-          font-family: Lucida Sans, Lucida Sans Regular, Lucida Grande,
-            Lucida Sans Unicode, Geneva, Verdana, sans-serif;
-        "
-      >
-        <span style="font-size: bigger; color: white"> the archi-hub API</span>
+      <h1 style="color: rgb(233, 235, 235); font-weight: 300">
+        <span style="font-size: 3rem; color: rgb(182, 189, 187)">
+          tutor APP</span
+        >
       </h1>
       <a
         href="https://tutor-app-backend.vercel.app/api_docs"
+        onmouseover='this.style.color=" rgba(251, 176, 59)"'
+        onmouseout='this.style.color=" rgb(223, 218, 218)"'
         style="
-          color: rgba(251, 176, 59, 1);
-          font-family: Lucida Sans, Lucida Sans Regular, Lucida Grande,
-            Lucida Sans Unicode, Geneva, Verdana, sans-serif;
+          color: rgb(223, 218, 218);
+          text-underline-offset: 0.5em;
+          text-decoration-thickness: 0.05em;
+          font-weight: 300;
         "
         >Click to view Documentation</a
       >
