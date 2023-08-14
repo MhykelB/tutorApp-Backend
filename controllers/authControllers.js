@@ -34,13 +34,13 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password) {
+  const { email, password } = req.body;
+  if (!email || !password) {
     throw new Error("something went wrong");
   }
-  const user = await userSchema.findOne({ username: username });
+  const user = await userSchema.findOne({ email: email });
   if (!user) {
-    throw new Error("something went username");
+    throw new Error("something went wrong wt email");
   }
   const isPassword = await user.comparePassword(password);
   if (!isPassword) {
