@@ -21,6 +21,7 @@ app.use(express.static("./public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use("/auth", authRouter);
+
 app.use("/chats", authenticateMiddleware, chatsRouter);
 app.use("/api_docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc, options));
 
