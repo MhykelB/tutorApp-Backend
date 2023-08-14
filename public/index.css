@@ -1,0 +1,13 @@
+:root {
+  --main-color: rgb(180, 119, 5);
+  --main-color-b: rgba(2, 37, 46, 0.952);
+  --main-color-para: rgb(209, 204, 209);
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  /* color: var(--main-color); */
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}

@@ -1,3 +1,9 @@
+const path = require("path");
+const swaggerUI = require("swagger-ui-express");
+const swaggerDoc = require("./swagger.json");
+const options = {
+  customCssUrl: "https://unpkg.com/swagger-ui-dist@3/swagger-ui.css",
+};
 const express = require("express");
 const app = express();
 const { Server } = require("socket.io");
@@ -9,7 +15,7 @@ const authRouter = require("./routes/authRoutes");
 const chatsRouter = require("./routes/chatsRoutes");
 require("dotenv").config();
 const authenticateMiddleware = require("./middleware/authMiddleWare");
-
+app.use("/api_docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc, options));
 app.use(cors());
 app.use(express.json());
 
@@ -17,7 +23,7 @@ app.use("/auth", authRouter);
 app.use("/chats", authenticateMiddleware, chatsRouter);
 
 app.get("/", (req, res) => {
-  res.send("working pretty well");
+  res.sendFile(path.resolve(__dirname, "./public/index.html"));
 });
 
 const io = new Server(server, {
