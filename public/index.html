@@ -7,13 +7,17 @@
     <link rel="stylesheet" href="./index.css" />
     <title>TutorApp API Endpoints</title>
     <style>
+      body {
+        background: rgb(40, 51, 49);
+      }
       .wrapper {
-        background-color: rgb(39, 54, 52);
+        background-color: white;
         margin: 12rem auto;
         max-width: 20rem;
         padding: 2rem;
         display: flex;
         flex-direction: column;
+        border-radius: 0.5rem;
         gap: 1.5rem;
         align-items: center;
         font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
@@ -27,20 +31,26 @@
     <div class="wrapper">
       <h1
         style="
-          color: rgb(229, 234, 235);
           font-weight: 100;
           font-family: Lucida Sans, Lucida Sans Regular, Lucida Grande,
             Lucida Sans Unicode, Geneva, Verdana, sans-serif;
         "
       >
-        <span style="font-size: bigger; color: white"> Tutor app</span>
+        <span style="font-size: bigger; color: rgb(12, 52, 65)">
+          Tutor app</span
+        >
       </h1>
       <a
         href="https://tutor-app-backend.vercel.app/api_docs"
+        onmouseover='this.style.color="rgb(12, 52, 65, .7)"'
+        onmouseout='this.style.color="rgba(12, 52, 65)"'
         style="
-          color: rgba(251, 176, 59, 1);
+          color: rgb(30, 28, 26);
           font-family: Lucida Sans, Lucida Sans Regular, Lucida Grande,
             Lucida Sans Unicode, Geneva, Verdana, sans-serif;
+          :hover {
+            color: rgb(167, 182, 186);
+          }
         "
         >Click to view Documentation</a
       >
