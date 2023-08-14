@@ -1,0 +1,8 @@
+/node_modules
+*.env
+test.js
+testJobs.json
+testNovu.js
+testUsers.json
+playground-1.mongodb.js
+novuTask.txt
