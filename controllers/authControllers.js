@@ -6,7 +6,7 @@ const hashPassword = require("./utils/hashPassword");
 
 const register = async (req, res) => {
   const { username, email, password } = req.body;
-  if (!username || !password) {
+  if (!email || !password || !username) {
     return res.status(400).json({ message: "invalid credentials" });
   }
   req.body.password = await hashPassword(password);
