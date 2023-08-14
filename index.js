@@ -19,9 +19,9 @@ const authenticateMiddleware = require("./middleware/authMiddleWare");
 app.use(express.static("./public"));
 app.use(cors());
 app.use(express.json());
-app.use("/api_docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc, options));
 app.use("/auth", authRouter);
 app.use("/chats", authenticateMiddleware, chatsRouter);
+app.use("/api_docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc, options));
 
 app.get("/", (req, res) => {
   res.sendFile(path.resolve(__dirname, "./public/index.html"));
