@@ -11,7 +11,7 @@ const register = async (req, res) => {
   }
   req.body.password = await hashPassword(password);
   const confirmToken = jwt.sign({ email: email }, process.env.JWT_SECRET, {
-    expiresIn: 500,
+    expiresIn: 5000,
   });
   req.body.token = confirmToken;
   await userSchema.createIndexes({ username: 1, email: 1 });
