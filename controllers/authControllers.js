@@ -17,7 +17,10 @@ const register = async (req, res) => {
   await userSchema.createIndexes({ username: 1, email: 1 });
   let newUser = await userSchema.create(req.body);
   if (!newUser) {
-    throw error;
+    return res.status(400).json({
+      success: true,
+      message: "something went wroong",
+    });
   }
   // const mailInfo = await sendMail(
   //   email,
