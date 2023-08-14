@@ -6,19 +6,19 @@ const hashPassword = require("./utils/hashPassword");
 
 const register = async (req, res) => {
   const { username, email, password } = req.body;
-  // if (!email || !password || !username) {
-  //   return res.status(400).json({ message: "invalid credentials" });
-  // }
-  // req.body.password = await hashPassword(password);
-  // const confirmToken = jwt.sign({ email: email }, process.env.JWT_SECRET, {
-  //   expiresIn: 500,
-  // });
-  // req.body.token = confirmToken;
-  // await userSchema.createIndexes({ username: 1, email: 1 });
-  // let newUser = await userSchema.create(req.body);
-  // if (!newUser) {
-  //   throw error;
-  // }
+  if (!email || !password || !username) {
+    return res.status(400).json({ message: "invalid credentials" });
+  }
+  req.body.password = await hashPassword(password);
+  const confirmToken = jwt.sign({ email: email }, process.env.JWT_SECRET, {
+    expiresIn: 500,
+  });
+  req.body.token = confirmToken;
+  await userSchema.createIndexes({ username: 1, email: 1 });
+  let newUser = await userSchema.create(req.body);
+  if (!newUser) {
+    throw error;
+  }
   // const mailInfo = await sendMail(
   //   email,
   //   "verify",
@@ -27,7 +27,7 @@ const register = async (req, res) => {
   // );
   return res.status(201).json({
     success: true,
-    message: "account created, link senttt",
+    message: "account created, link sent.",
     // mailInfo,
     // token: confirmToken,
   });
