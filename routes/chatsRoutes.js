@@ -5,10 +5,12 @@ const {
   getUsers,
   getOurChats,
   sendMessage,
+  updatedProfile,
 } = require("../controllers/mainControllers");
 
 chatsRouter.get("/", getUsers);
 chatsRouter.get("/:user2ID", getOurChats);
-chatsRouter.post("/", sendMessage);
+chatsRouter.post("/sendmessage", sendMessage);
+chatsRouter.patch("/updateprofile", updatedProfile);
 
 module.exports = chatsRouter;

@@ -1,22 +1,34 @@
 const chatsSchema = require("../models/message_schema");
 const userSchema = require("../models/user_schemas");
-// const { Server } = require("socket.io");
-// const server = require("../index");
-
-// const io = new Server(server, {
-//   // cors: {
-//   //   origin: "*",
-//   // },
-// });
 
 const getUsers = async (req, res) => {
   // return every usr except the one logged in
-  const allUsers = await userSchema.find({
-    username: {
-      $nin: req.user.username,
+  const { userID } = req.query;
+  if (userID) {
+    try {
+      const oneUser = await userSchema.findOne(
+        {
+          _id: userID,
+        },
+        { token: 0 }
+      );
+
+      oneUser && res.status(200).json({ user: oneUser });
+      return;
+    } catch (err) {
+      res.status(500).json(err);
+      return;
+    }
+  }
+  const allUsers = await userSchema.find(
+    {
+      username: {
+        $nin: req.user.username,
+      },
+      tutor: true,
     },
-    tutor: true,
-  });
+    { token: 0 }
+  );
   if (allUsers) {
     res.status(200).json({ allUsers, user: req.user });
   } else {
@@ -66,7 +78,7 @@ const sendMessage = async (req, res) => {
     { $push: { chats: obj.chats } },
     { new: true }
   );
-  // im popping of the msg sent which is the last, sending to f.e awhere it would be concated to the exisiing array
+  // im popping of the msg sent which is automatically the last on the list, sending to f.e where it would be concated to the exisitng array
   const addedObj = isChat.chats.slice(-1)[0];
   if (!isChat) {
     return res
@@ -75,33 +87,27 @@ const sendMessage = async (req, res) => {
   }
 
   res.status(200).json(addedObj);
-  // if (isChat) {
-  //   const appendChatObj = isChat.chats.concat(obj.chats);
-  //   isChat.set({ chats: appendChatObj });
-  //   const newDoc = await isChat.save();
-  //   if (newDoc) {
-  //     return res.status(200).json(newDoc);
-  //   } else {
-  //     res
-  //       .status(500)
-  //       .json({ message: "something went wrong with post message" });
-  //   }
-  // }
-  // //if there is no existing conversation history
-  // else {
-  //   obj.creators_ID = [userID, user2ID];
-  //   obj.chats = [{ message, sender_ID: userID }];
-  //   const newObj = await chatsSchema.create(obj);
-  //   if (newObj) {
-  //     res.status(201).json({ chat: newObj });
-  //   } else {
-  //     res.status(500).json({ message: "something went wrong" });
-  //   }
-  // }
+};
+
+// patch request to update profile
+const updatedProfile = async (req, res) => {
+  try {
+    const user = await userSchema.findOneAndUpdate(
+      { _id: req.user.userID },
+      req.body,
+      { new: true }
+    );
+    if (user) {
+      return res.status(200).json({ message: "profile updated", user });
+    }
+  } catch (err) {
+    return res.status(200).json(err);
+  }
 };
 
 module.exports = {
   getUsers,
   getOurChats,
   sendMessage,
+  updatedProfile,
 };

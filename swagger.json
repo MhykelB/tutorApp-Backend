@@ -250,7 +250,49 @@
         ]
       }
     },
-    "/chats/sendMessage": {
+    "/chats/updateprofile": {
+      "patch": {
+        "tags": ["chatsPage"],
+        "summary": "updates user profile",
+        "operationId": "updateprofile",
+        "parameters": [],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "example": {
+                      "sex": "female",
+                      "subjects": ["maths", "physics"]
+                    }
+                  }
+                ]
+              },
+              "example": {
+                "sex": "female",
+                "subjects": ["maths", "physics"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/chats/sendmessage": {
       "post": {
         "tags": ["chats"],
         "summary": "exchange texts with a user on chatpage",
@@ -401,11 +443,7 @@
   "security": [],
   "tags": [
     {
-      "name": "Misc",
-      "description": ""
-    },
-    {
-      "name": "passwordReset",
+      "name": "password-reset",
       "description": ""
     },
     {
