@@ -15,10 +15,11 @@ const authRouter = require("./routes/authRoutes");
 const chatsRouter = require("./routes/chatsRoutes");
 require("dotenv").config();
 const authenticateMiddleware = require("./middleware/authMiddleWare");
-app.use("/api_docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc, options));
+
+app.use(express.static("./public"));
 app.use(cors());
 app.use(express.json());
-
+app.use("/api_docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc, options));
 app.use("/auth", authRouter);
 app.use("/chats", authenticateMiddleware, chatsRouter);
 
