@@ -4,11 +4,11 @@ const chatsRouter = express.Router();
 const {
   getUsers,
   getOurChats,
-  postMessage,
+  sendMessage,
 } = require("../controllers/mainControllers");
 
 chatsRouter.get("/", getUsers);
 chatsRouter.get("/:user2ID", getOurChats);
-chatsRouter.post("/", postMessage);
+chatsRouter.post("/", sendMessage);
 
 module.exports = chatsRouter;

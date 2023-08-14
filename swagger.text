@@ -1,0 +1,55 @@
+--------REGISTER--------------
+/auth/register:
+    post:
+      tags:
+        - auth
+      summary: register
+      operationId: register
+      parameters: []
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/registerrequest"
+                - example:
+                    userName: Mhyke
+                    firstName: Mhyke
+                    lastName: Mhyke
+                    interests:
+                      - 3D
+                      - rendering
+                      - archviz
+            example:
+              userName: Mhyke
+              firstName: Mhyke
+              lastName: Mhyke
+              interests:
+                - 3D
+                - rendering
+                - archviz
+        required: true
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+      security:
+        - bearer: []
+--------CONFIRM PASSWORD--------------
+
+/auth/confirmemail:
+    post:
+      tags:
+        - auth
+      summary: link sent to email to complete signup
+      operationId: clickToCompleteSignUp
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+      security:
+        - bearer: []

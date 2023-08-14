@@ -15,6 +15,7 @@ const getUsers = async (req, res) => {
     username: {
       $nin: req.user.username,
     },
+    tutor: true,
   });
   if (allUsers) {
     res.status(200).json({ allUsers, user: req.user });
@@ -51,7 +52,7 @@ const getOurChats = async (req, res) => {
   }
 };
 
-const postMessage = async (req, res) => {
+const sendMessage = async (req, res) => {
   const { userID } = req.user;
   const { user2ID, message } = req.body;
   const obj = { chats: { message, sender_ID: userID } };
@@ -102,5 +103,5 @@ const postMessage = async (req, res) => {
 module.exports = {
   getUsers,
   getOurChats,
-  postMessage,
+  sendMessage,
 };
