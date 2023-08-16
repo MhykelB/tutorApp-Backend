@@ -16,7 +16,7 @@
     "/auth/register": {
       "post": {
         "tags": ["auth"],
-        "summary": "register",
+        "summary": "register // take note of the tutuor boolean property while signing up so you can use it for conditional rendering",
         "operationId": "register",
         "parameters": [],
         "requestBody": {
@@ -202,7 +202,7 @@
     "/chats": {
       "get": {
         "tags": ["chatsPage"],
-        "summary": "gets list of tutors",
+        "summary": "As a guardian who signed in, this will get you a list of users who are tutors",
         "operationId": "getalltutors",
         "parameters": [],
         "responses": {
@@ -222,7 +222,7 @@
     "/chats/{user2ID}": {
       "get": {
         "tags": ["chatsPage"],
-        "summary": "gets the chats entry between you and user or tutor",
+        "summary": "when you now click on one of them, it will take you to a chat page and getChats request would be sent with user2ID in the route param, returning your chat entry with the person, it will be an empty array if there is no chat history",
         "operationId": "getOurChats",
         "parameters": [
           {
@@ -253,7 +253,7 @@
     "/chats/updateprofile": {
       "patch": {
         "tags": ["chatsPage"],
-        "summary": "updates user profile",
+        "summary": "use this to add additional field to user after email confirmation.",
         "operationId": "updateprofile",
         "parameters": [],
         "requestBody": {
@@ -295,7 +295,7 @@
     "/chats/sendmessage": {
       "post": {
         "tags": ["chats"],
-        "summary": "exchange texts with a user on chatpage",
+        "summary": "use this to exchange message on chat page",
         "operationId": "sendText",
         "parameters": [],
         "requestBody": {
