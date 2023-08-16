@@ -40,12 +40,13 @@ io.on("connection", (socket) => {
     message: `you are online`,
   });
   socket.on("joinRoom", (payload) => {
-    console.log(payload);
+    // console.log(payload);
     socket.join(payload);
   });
   socket.on("message-sent", (payload) => {
-    console.log(payload.addedMessage);
-    socket.to(payload.creators).emit("update-message", payload.addedMessage);
+    console.log(socket.id);
+
+    io.to(payload.creators).emit("update-message", payload.addedMessage);
   });
 });
 

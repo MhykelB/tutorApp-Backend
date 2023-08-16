@@ -104,7 +104,6 @@ const updatedProfile = async (req, res) => {
     return res.status(200).json(err);
   }
 };
-
 module.exports = {
   getUsers,
   getOurChats,

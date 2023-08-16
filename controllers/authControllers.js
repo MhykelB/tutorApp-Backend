@@ -6,6 +6,9 @@ const hashPassword = require("./utils/hashPassword");
 
 const register = async (req, res) => {
   const { username, email, password } = req.body;
+  // if (!email || !password || !username) {
+  //   return res.status(400).json({ message: "invalid credentials" });
+  // }
   if (!email || !password || !username) {
     return res.status(400).json({ message: "invalid credentials" });
   }
@@ -15,6 +18,7 @@ const register = async (req, res) => {
   });
   req.body.token = confirmToken;
   await userSchema.createIndexes({ username: 1, email: 1 });
+
   let newUser = await userSchema.create(req.body);
   if (!newUser) {
     return res.status(400).json({
@@ -41,7 +45,8 @@ const login = async (req, res) => {
   if (!email || !password) {
     throw new Error("something went wrong");
   }
-  const user = await userSchema.findOne({ email: email });
+  // const user = await userSchema.findOne({ email: email });
+  const user = await userSchema.findOne({ username: username });
   if (!user) {
     throw new Error("something went wrong wt email");
   }
