@@ -4,8 +4,8 @@ const swaggerDoc = require("./swagger.json");
 const options = {
   customCssUrl: "https://unpkg.com/swagger-ui-dist@3/swagger-ui.css",
 };
-const express = require("express");
 require("dotenv").config();
+const express = require("express");
 const app = express();
 require("express-async-errors");
 const cors = require("cors");
@@ -14,15 +14,14 @@ const server = require("http").createServer(app);
 const connectDB = require("./db/connectDB");
 const authRouter = require("./routes/authRoutes");
 const chatsRouter = require("./routes/chatsRoutes");
-
 const authenticateMiddleware = require("./middleware/authMiddleWare");
-const corsOptions = {
-  origin: "*",
-  credentials: true, //access-control-allow-credentials:true
-  optionSuccessStatus: 200,
-};
+// const corsOptions = {
+//   origin: "*",
+//   credentials: true, //access-control-allow-credentials:true
+//   optionSuccessStatus: 200,
+// };
 //middleware
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.static("./public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
