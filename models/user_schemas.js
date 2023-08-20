@@ -2,6 +2,28 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const single_messageSchema = new mongoose.Schema(
+  {
+    text: {
+      type: String,
+    },
+  },
+  { timestamps: true },
+  { _id: false }
+);
+const unread_messagesSchema = new mongoose.Schema({
+  sender_ID: {
+    type: mongoose.Types.ObjectId,
+    ref: "User",
+  },
+  sender_username: {
+    type: String,
+  },
+  messages: {
+    type: [single_messageSchema],
+  },
+});
+
 const userSchema = new mongoose.Schema(
   {
     email: {
@@ -35,6 +57,14 @@ const userSchema = new mongoose.Schema(
     sex: {
       type: String,
       enum: ["male", "female"],
+    },
+    available: {
+      type: Boolean,
+      default: true,
+    },
+    unread_messages: {
+      type: [unread_messagesSchema],
+      default: [],
     },
   },
   {

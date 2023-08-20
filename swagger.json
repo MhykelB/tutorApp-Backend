@@ -199,9 +199,29 @@
         "security": []
       }
     },
+    "/chats/getcurrentuser": {
+      "get": {
+        "tags": ["chats"],
+        "summary": "this will return an object containing your info/profile details, you can make this request once you log in",
+        "operationId": "getsmyinfo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/chats": {
       "get": {
-        "tags": ["chatsPage"],
+        "tags": ["chats"],
         "summary": "As a guardian who signed in, this will get you a list of users who are tutors",
         "operationId": "getalltutors",
         "parameters": [],
@@ -221,7 +241,7 @@
     },
     "/chats/{user2ID}": {
       "get": {
-        "tags": ["chatsPage"],
+        "tags": ["chats"],
         "summary": "when you now click on one of them, it will take you to a chat page and getChats request would be sent with user2ID in the route param, returning your chat entry with the person, it will be an empty array if there is no chat history",
         "operationId": "getOurChats",
         "parameters": [
@@ -252,7 +272,7 @@
     },
     "/chats/updateprofile": {
       "patch": {
-        "tags": ["chatsPage"],
+        "tags": ["chats"],
         "summary": "use this to add additional field to user after email confirmation.",
         "operationId": "updateprofile",
         "parameters": [],
@@ -294,7 +314,7 @@
     },
     "/chats/sendmessage": {
       "post": {
-        "tags": ["chats"],
+        "tags": ["chatsPage"],
         "summary": "use this to exchange message on chat page",
         "operationId": "sendText",
         "parameters": [],
@@ -314,6 +334,54 @@
                     }
                   }
                 ]
+              },
+              "example": {
+                "user2ID": "645f835a7d15b93c27f16343",
+                "message": "hi there"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/chats/addunreadmessage/{user2ID}": {
+      "post": {
+        "tags": ["chatsPage"],
+        "summary": "in case you send a message to someone who isn't online, this request would be sent to add to that person's list of unread messages(so include the person id as a param and the message in the request body), b4 u wonder how the person now gets it once logged in, an \"unread_messages\" field has been auto added to every exisitng profile, so once you make a request to /getcurrentuser once loggedin, that property comes with it, it's an array, empty by default.",
+        "operationId": "sendunresdmessage",
+        "parameters": [
+          {
+            "name": "user2ID",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "645f835a7d15b93c27f16343"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "example": {
+                  "message": "hi there"
+                }
               },
               "example": {
                 "user2ID": "645f835a7d15b93c27f16343",

@@ -41,7 +41,7 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, username } = req.body;
   if (!email || !password) {
     throw new Error("something went wrong");
   }
