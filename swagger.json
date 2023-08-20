@@ -8,7 +8,7 @@
   },
   "servers": [
     {
-      "url": "https://tutor-app-backend.vercel.app/",
+      "url": "https://tutor-app-v1.vercel.app/",
       "variables": {}
     }
   ],
