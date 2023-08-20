@@ -1,3 +1,4 @@
+require("express-async-errors");
 const path = require("path");
 const swaggerUI = require("swagger-ui-express");
 const swaggerDoc = require("./swagger.json");
@@ -9,14 +10,18 @@ const app = express();
 const { Server } = require("socket.io");
 const server = require("http").createServer(app);
 const cors = require("cors");
-require("express-async-errors");
+
 const connectDB = require("./db/connectDB");
 const authRouter = require("./routes/authRoutes");
 const chatsRouter = require("./routes/chatsRoutes");
 require("dotenv").config();
 const authenticateMiddleware = require("./middleware/authMiddleWare");
-
-app.use(cors());
+const corsOptions = {
+  origin: "*",
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 app.use(express.static("./public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
