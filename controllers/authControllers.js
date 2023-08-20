@@ -41,12 +41,12 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { email, password, username } = req.body;
+  const { email, password } = req.body;
   if (!email || !password) {
     throw new Error("something went wrong");
   }
   // const user = await userSchema.findOne({ email: email });
-  const user = await userSchema.findOne({ username: username });
+  const user = await userSchema.findOne({ email: email });
   if (!user) {
     throw new Error("something went wrong wt email");
   }
