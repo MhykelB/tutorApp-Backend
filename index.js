@@ -14,6 +14,8 @@ const server = require("http").createServer(app);
 const connectDB = require("./db/connectDB");
 const authRouter = require("./routes/authRoutes");
 const chatsRouter = require("./routes/chatsRoutes");
+const userRouter = require("./routes/userRoutes");
+
 const authenticateMiddleware = require("./middleware/authMiddleWare");
 // const corsOptions = {
 //   origin: "*",
@@ -27,6 +29,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use("/auth", authRouter);
 app.use("/chats", authenticateMiddleware, chatsRouter);
+app.use("/user", authenticateMiddleware, userRouter);
+
 app.use("/api_docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc, options));
 
 app.get("/", (req, res) => {
@@ -38,21 +42,53 @@ const io = new Server(server, {
     origin: "*",
   },
 });
-io.on("connection", (socket) => {
-  // console.log(socket.id);
-  socket.broadcast.emit("alert", {
-    message: `you are online`,
+const nsp = io.of("/notices");
+const chatSpace = io.of("/chatroom");
+nsp.on("connection", (nsp) => {
+  console.log("connected to receive notices");
+  nsp.on("join-notification", (payload) => {
+    nsp.join(payload);
+    nsp.emit("ready-notice", " i'm ready to receive notices");
   });
-  socket.on("joinRoom", (payload) => {
-    // console.log(payload);
-    socket.join(payload);
-  });
-  socket.on("message-sent", (payload) => {
-    console.log(socket.id);
+  // nsp.on("disconnect", async () => {
+  //   const roomUsers = io.of("/notices").clients();
+  //   console.log(roomUsers);
+  // });
+});
 
-    io.to(payload.creators).emit("update-message", payload.addedMessage);
+chatSpace.on("connection", (socket) => {
+  socket.on("joinRoom", async (payload) => {
+    console.log("a user joined room " + payload);
+    socket.join(payload);
+    socket.on("disconnect", () => {
+      console.log("a user disconnected");
+    });
+  });
+  socket.on("message-sent", async (payload) => {
+    //  console.log(socket.id);
+    const body = {
+      addedMessage: payload.addedMessage,
+      online: "shade",
+    };
+    const roomUsers = await chatSpace.in(payload.creators).fetchSockets();
+    roomUsers.length < 2 ? (body.online = false) : (body.online = true);
+    chatSpace.to(payload.creators).emit("update-message", body);
+    if (roomUsers.length < 2) {
+      // console.log(roomUsers.length + " persons");
+      console.log(socket.id);
+      return;
+    } else {
+      console.log(roomUsers.length + " multiple persons");
+    }
+  });
+  socket.on("notice-sent", async (payload) => {
+    console.log(payload.sender);
+    const roomUsers = await nsp.in(payload.user2ID).fetchSockets();
+    console.log(roomUsers.length + " persons");
+    io.of("/notices").to(`${payload.user2ID}`).emit("new-notice", payload);
   });
 });
+// chatSpace.on
 
 const start = async () => {
   try {

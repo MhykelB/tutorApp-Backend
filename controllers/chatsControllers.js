@@ -4,6 +4,7 @@ const userSchema = require("../models/user_schemas");
 const addUnreadMessage = async (req, res) => {
   const { message } = req.body;
   const { user2ID } = req.params;
+  console.log(message);
   // firstly check if the user2 already has an entry of unread mesaages from current user
   try {
     const user = await userSchema.findOne(
@@ -15,41 +16,57 @@ const addUnreadMessage = async (req, res) => {
     );
     //if so, add to the list of unread messages
     if (user) {
+      // let newEntry;
       const unread_entries = user.unread_messages;
       const updated_entries = unread_entries.map((entry) => {
         if (entry.sender_ID == req.user.userID) {
           // i used == because the === was being too imperative, it's not finding it though it is there
           entry.messages.push({ text: message });
-          return entry;
         }
+        return entry;
       });
       user.set({
         unread_messages: updated_entries,
       });
       await user.save();
+      let newEntry = user.unread_messages.filter((entry) => {
+        return entry.sender_ID == req.user.userID;
+      });
+      newEntry = newEntry[0].messages.slice(-1)[0];
       return res.status(200).json({
-        message: "notification sent, exiting entry found",
+        message: "notification sent, existing entry found",
+        data: newEntry,
+        new: false,
       });
       // user2 doesnt not have an entry already the user variable set earlier would be null, so create an entry
     } else if (user === null) {
-      await userSchema.findOneAndUpdate(
+      const body = {
+        sender_ID: req.user.userID,
+        sender_username: req.user.username,
+        messages: [{ text: message }],
+      };
+      const doc = await userSchema.findOneAndUpdate(
         { _id: user2ID },
         {
-          unread_messages: [
-            {
-              sender_ID: req.user.userID,
-              sender_username: req.user.username,
-              messages: [{ text: message }],
-            },
-          ],
-        }
+          $push: {
+            unread_messages: body,
+          },
+        },
+        { new: true }
       );
-      return res.status(200).json({ message: "notification sent, new entry" });
+      const newEntry = doc.unread_messages.filter((entry) => {
+        return entry.sender_ID == req.user.userID;
+      })[0];
+      return res.status(200).json({
+        message: "notification sent, new entry",
+        data: newEntry,
+        new: true,
+      });
     } else {
       return res.status(400).json({ message: "entry not found" });
     }
   } catch (err) {
-    res.status(500).json(err);
+    res.status(400).json(err);
     return;
   }
 };
@@ -110,6 +127,20 @@ const getOurChats = async (req, res) => {
   const obj = {};
   const { userID } = req.user;
   const { user2ID } = req.params;
+  // first delete the person's unread msgs with me
+  const me = await userSchema.findOne({
+    _id: userID,
+    "unread_messages.sender_ID": user2ID,
+  });
+  if (me) {
+    const newObj = me.unread_messages.filter((entry) => {
+      return entry.sender_ID != user2ID;
+    });
+    me.set({
+      unread_messages: newObj,
+    });
+    await me.save();
+  }
   //check for exising conversation history
   const chatDocument = await chatsSchema.findOne({
     creators_ID: {
@@ -130,13 +161,16 @@ const getOurChats = async (req, res) => {
       .status(200)
       .json({ chatEntry: newObj, message: "created new chat entry" });
   } else {
-    res.status(500).json({ message: "sometin went wrong gettin d cahts" });
+    res
+      .status(500)
+      .json({ message: "sometin went wrong when fetching the chats" });
   }
 };
 
 const sendMessage = async (req, res) => {
   const { userID } = req.user;
   const { user2ID, message } = req.body;
+
   const obj = { chats: { message, sender_ID: userID } };
   //check for exising conversation history and update
   const isChat = await chatsSchema.findOneAndUpdate(

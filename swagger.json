@@ -199,9 +199,9 @@
         "security": []
       }
     },
-    "/chats/getcurrentuser": {
+    "/user": {
       "get": {
-        "tags": ["chats"],
+        "tags": ["user"],
         "summary": "this will return an object containing your info/profile details, you can make this request once you log in",
         "operationId": "getsmyinfo",
         "parameters": [],
@@ -219,12 +219,21 @@
         ]
       }
     },
-    "/chats": {
+    "/user/get-tutors": {
       "get": {
-        "tags": ["chats"],
-        "summary": "As a guardian who signed in, this will get you a list of users who are tutors",
+        "tags": ["user"],
+        "summary": "As a guardian who signed in, this will get you a list of all users signed up as tutors, if a specific id is included as a query parameter e.g /?userID=\"id\", it will return only that specific user/tutor",
         "operationId": "getalltutors",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "userID",
+            "in": "query",
+            "description": "ID of the object to fetch",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -270,9 +279,9 @@
         ]
       }
     },
-    "/chats/updateprofile": {
+    "/user/updateprofile": {
       "patch": {
-        "tags": ["chats"],
+        "tags": ["user"],
         "summary": "use this to add additional field to user after email confirmation.",
         "operationId": "updateprofile",
         "parameters": [],
@@ -358,7 +367,7 @@
       }
     },
     "/chats/addunreadmessage/{user2ID}": {
-      "post": {
+      "patch": {
         "tags": ["chatsPage"],
         "summary": "in case you send a message to someone who isn't online, this request would be sent to add to that person's list of unread messages(so include the person id as a param and the message in the request body), b4 u wonder how the person now gets it once logged in, an \"unread_messages\" field has been auto added to every exisitng profile, so once you make a request to /getcurrentuser once loggedin, that property comes with it, it's an array, empty by default.",
         "operationId": "sendunresdmessage",
@@ -517,6 +526,10 @@
     {
       "name": "auth",
       "description": ""
+    },
+    {
+      "name": "user",
+      "description": "user-routes"
     }
   ]
 }

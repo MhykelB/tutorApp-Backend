@@ -15,9 +15,11 @@ const unread_messagesSchema = new mongoose.Schema({
   sender_ID: {
     type: mongoose.Types.ObjectId,
     ref: "User",
+    required: [true, "include sender's name"],
   },
   sender_username: {
     type: String,
+    required: [true, "include sender's name"],
   },
   messages: {
     type: [single_messageSchema],
